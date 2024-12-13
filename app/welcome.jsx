@@ -29,7 +29,17 @@ const Welcome = () => {
           <View style={styles.bottomTextContainer}>
             <Text style={styles.loginText}>Ya tienes una cuenta?</Text>
             <Pressable>
-              <Text style={[styles.loginText]}>Iniciar sesión</Text>
+              <Text
+                style={[
+                  styles.loginText,
+                  {
+                    color: theme.colors.primaryDark,
+                    fontWeight: theme.fonts.semibold,
+                  },
+                ]}
+              >
+                Iniciar sesión
+              </Text>
             </Pressable>
           </View>
         </View>
