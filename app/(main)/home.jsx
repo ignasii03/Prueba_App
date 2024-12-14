@@ -14,13 +14,6 @@ const Home = () => {
   const { user, setAuth } = useAuth();
   const router = useRouter();
 
-  // const onLogout = async () => {
-  //   const { error } = await supabase.auth.signOut();
-  //   if (error) {
-  //     Alert.alert("Cerrar sesión", "Error al cerrar sesión");
-  //   }
-  // };
-
   return (
     <ScreenWrapper bg="white">
       <View style={styles.container}>
