@@ -54,7 +54,7 @@ const Home = () => {
           </View>
         </View>
       </View>
-      <Button title="Cerrar sesión" onPress={onLogout} />
+      {/* <Button title="Cerrar sesión" onPress={onLogout} /> */}
     </ScreenWrapper>
   );
 };
