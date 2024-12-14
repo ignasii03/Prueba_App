@@ -11,6 +11,7 @@ import Icon from "../assets/icons";
 import { useState, useRef } from "react";
 import Button from "../components/Button";
 import { Alert } from "react-native";
+import { supabase } from "@/lib/supabase";
 
 const Login = () => {
   const router = useRouter();

@@ -1,15 +1,14 @@
 import { View, Text, Button } from "react-native";
 import React from "react";
+import Loading from "../components/Loading";
 import { useRouter } from "expo-router";
-import ScreenWrapper from "../components/ScreenWrapper";
+
 const index = () => {
   const router = useRouter();
-
   return (
-    <ScreenWrapper>
-      <Text>index</Text>
-      <Button title="Welcome" onPress={() => router.push("welcome")} />
-    </ScreenWrapper>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Loading />
+    </View>
   );
 };
 
