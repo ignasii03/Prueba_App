@@ -5,7 +5,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "expo-router";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import { getUserData } from "../services/userServices";
 
 const _layout = () => {
@@ -35,7 +35,7 @@ const MainLayout = () => {
 
   const updateUserData = async (user) => {
     let res = await getUserData(user?.id);
-    if (res?.success) setUserData(res.data);
+    if (res.success) setUserData(res.data);
   };
 
   return (

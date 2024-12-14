@@ -9,16 +9,17 @@ import { theme } from "../../constants/theme";
 import Icon from "../../assets/icons";
 import { useRouter } from "expo-router";
 import Avatar from "../../components/Avatar";
+
 const Home = () => {
   const { user, setAuth } = useAuth();
   const router = useRouter();
 
-  const onLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      Alert.alert("Cerrar sesión", "Error al cerrar sesión");
-    }
-  };
+  // const onLogout = async () => {
+  //   const { error } = await supabase.auth.signOut();
+  //   if (error) {
+  //     Alert.alert("Cerrar sesión", "Error al cerrar sesión");
+  //   }
+  // };
 
   return (
     <ScreenWrapper bg="white">

@@ -1,9 +1,11 @@
-export const updateUserData = async (user) => {
+import { supabase } from "@/lib/supabase";
+
+export const getUserData = async (userId) => {
   try {
     const { data, error } = await supabase
       .from("users")
-      .select()
-      .eq("id", user.id)
+      .select("*")
+      .eq("id", userId)
       .single();
 
     if (error) {
