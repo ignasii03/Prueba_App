@@ -13,6 +13,17 @@ const Login = () => {
       <StatusBar style="dark" />
       <View style={styles.container}>
         <BackButton router={router} />
+
+        {/* Bienvenida */}
+        <View style={styles.welcomeContainer}>
+          <Text style={styles.welcomeText}>Hola,</Text>
+          <Text style={styles.welcomeText}>Bienvenido de nuevo!</Text>
+        </View>
+
+        {/* Formulario */}
+        <View style={styles.form}>
+          <Text style={{}}>Iniciar sesión</Text>
+        </View>
       </View>
     </ScreenWrapper>
   );
@@ -33,5 +44,16 @@ const styles = StyleSheet.create({
   },
   form: {
     gap: 25,
+  },
+  forgotPassword: {
+    textAlign: "right",
+    fontWeight: theme.fonts.semibold,
+    color: theme.colors.text,
+  },
+  footer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 5,
   },
 });
