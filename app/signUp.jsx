@@ -11,7 +11,7 @@ import Icon from "../assets/icons";
 import { useState, useRef } from "react";
 import Button from "../components/Button";
 import { Alert } from "react-native";
-
+import { supabase } from "../lib/supabase";
 const SignUp = () => {
   const router = useRouter();
   const emailRef = useRef("");
@@ -25,7 +25,28 @@ const SignUp = () => {
       return;
     }
 
+    let name = nameRef.current.trim();
+    let email = emailRef.current.trim();
+    let password = passwordRef.current.trim();
+
     setLoading(true);
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { name },
+      },
+    });
+
+    setLoading(false);
+
+    if (error) {
+      Alert.alert("Registro", error.message);
+      return;
+    }
   };
 
   return (
