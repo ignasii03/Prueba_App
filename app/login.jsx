@@ -24,7 +24,21 @@ const Login = () => {
       return;
     }
 
+    let email = emailRef.current.trim();
+    let password = passwordRef.current.trim();
     setLoading(true);
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    setLoading(false);
+
+    if (error) {
+      Alert.alert("Inicio de sesión", error.message);
+      return;
+    }
   };
 
   return (
