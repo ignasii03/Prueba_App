@@ -13,7 +13,7 @@ import { theme } from "../../constants/theme";
 import Header from "../../components/Header";
 import { Image } from "expo-image";
 import { useAuth } from "../../contexts/AuthContext";
-import { getUserImageSrc } from "../../services/imageService";
+import { getUserImageSrc, uploadFile } from "../../services/imageService";
 import Icon from "../../assets/icons";
 import Input from "../../components/Input";
 import { useState, useEffect } from "react";
@@ -70,6 +70,9 @@ const EditProfile = () => {
     setLoading(true);
 
     if (typeof image === "object") {
+      let imageRes = await uploadFile("profiles", image?.uri, true);
+      if (imageRes.success) userData.image = imageRes.data;
+      else userData.image = null;
     }
 
     const res = await updateUser(currentUser?.id, userData);

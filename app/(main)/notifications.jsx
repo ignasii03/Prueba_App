@@ -1,11 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import ScreenWrapper from "../../components/ScreenWrapper";
+import Header from "../../components/Header";
 
 const Notifications = () => {
   return (
-    <View>
-      <Text>Notifications</Text>
-    </View>
+    <ScreenWrapper bg="white">
+      <Header title="Notificaciones" />
+    </ScreenWrapper>
   );
 };
 
