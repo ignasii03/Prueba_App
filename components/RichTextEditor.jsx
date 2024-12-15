@@ -32,7 +32,7 @@ const RichTextEditor = ({ editorRef, onChange }) => {
             <Text style={{ color: tintColor }}>H4</Text>
           ),
         }}
-        style={styles.richToolbar}
+        style={styles.richBar}
         flatContainerStyle={styles.flatStyle}
         selectedIconTint={theme.colors.primaryDark}
         editor={editorRef}
@@ -41,9 +41,9 @@ const RichTextEditor = ({ editorRef, onChange }) => {
 
       <RichEditor
         ref={editorRef}
-        contentStyle={styles.rich}
+        containerStyle={styles.rich}
         editorStyle={styles.contentStyle}
-        placeholder="Escribe aqui los ejercicios..."
+        placeholder={"Escribe aqui los ejercicios..."}
         onChange={onChange}
       />
     </View>
