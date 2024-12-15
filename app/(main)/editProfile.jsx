@@ -20,6 +20,9 @@ import { useState, useEffect } from "react";
 import { updateUser } from "../../services/userServices";
 import Button from "../../components/Button";
 import { router } from "expo-router";
+import { Alert } from "react-native";
+import * as ImagePicker from "expo-image-picker";
+
 const EditProfile = () => {
   const { user: currentUser, setUserData } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -43,7 +46,17 @@ const EditProfile = () => {
     }
   }, [currentUser]);
 
-  const onPickImage = async () => {};
+  const onPickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.7,
+    });
+    if (!result.canceled) {
+      setUser({ ...user, image: result.assets[0] });
+    }
+  };
 
   const onSubmit = async () => {
     let userData = { ...user };
@@ -56,6 +69,9 @@ const EditProfile = () => {
 
     setLoading(true);
 
+    if (typeof image === "object") {
+    }
+
     const res = await updateUser(currentUser?.id, userData);
     setLoading(false);
 
@@ -65,7 +81,10 @@ const EditProfile = () => {
     }
   };
 
-  let imageSource = getUserImageSrc(user.image);
+  let imageSource =
+    user.image && typeof user.image === "object"
+      ? user.image.uri
+      : getUserImageSrc(user.image);
 
   return (
     <ScreenWrapper bg="white">
