@@ -66,6 +66,7 @@ const UserHeader = ({ user, router, handleLogout }) => {
         <View style={{ gap: 15 }}>
           <View style={styles.avatarContainer}>
             <Avatar
+              style={styles.avatar}
               uri={user?.image}
               size={hp(12)}
               rounded={theme.radius.xxl * 1.4}
