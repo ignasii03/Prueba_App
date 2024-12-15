@@ -16,11 +16,13 @@ const Welcome = () => {
         <Image
           style={styles.welcomeImage}
           resizeMode="contain"
-          source={require("../assets/images/welcome.png")}
+          source={require("../assets/images/Logo_Green.png")}
         />
         <View style={{ gap: 20 }}>
           <Text style={styles.title}>Bienvenido!</Text>
-          <Text style={styles.punchline}>Prueba de App para IOS y Android</Text>
+          <Text style={styles.punchline}>
+            La mejor Red Social para ir al Gym
+          </Text>
         </View>
         <View style={styles.footer}>
           <Button
@@ -62,8 +64,8 @@ const styles = StyleSheet.create({
   },
 
   welcomeImage: {
-    width: wp(100),
-    height: hp(30),
+    width: wp(140),
+    height: hp(42),
     alignSelf: "center",
   },
   title: {
