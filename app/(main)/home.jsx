@@ -19,7 +19,7 @@ const Home = () => {
       <View style={styles.container}>
         {/* Navbar */}
         <View style={styles.header}>
-          <Text style={styles.title}>Inicio</Text>
+          <Text style={styles.title}>FitMaster</Text>
           <View style={styles.icons}>
             <Pressable onPress={() => router.push("notifications")}>
               <Icon

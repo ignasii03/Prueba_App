@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   Pressable,
   ScrollView,
 } from "react-native";
@@ -18,10 +17,12 @@ import { getUserImageSrc } from "../../services/imageService";
 import Icon from "../../assets/icons";
 import Input from "../../components/Input";
 import { useState, useEffect } from "react";
-
+import { updateUser } from "../../services/userServices";
+import Button from "../../components/Button";
+import { router } from "expo-router";
 const EditProfile = () => {
-  const { user: currentUser } = useAuth();
-
+  const { user: currentUser, setUserData } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     name: "",
     phoneNumber: "",
@@ -43,6 +44,26 @@ const EditProfile = () => {
   }, [currentUser]);
 
   const onPickImage = async () => {};
+
+  const onSubmit = async () => {
+    let userData = { ...user };
+    let { name, phoneNumber, address, image, bio } = userData;
+
+    if (!name || !address) {
+      Alert.alert("Error", "Los campos Usuario y País son obligatorios");
+      return;
+    }
+
+    setLoading(true);
+
+    const res = await updateUser(currentUser?.id, userData);
+    setLoading(false);
+
+    if (res.success) {
+      setUserData({ ...currentUser, ...userData });
+      router.back();
+    }
+  };
 
   let imageSource = getUserImageSrc(user.image);
 
@@ -88,6 +109,8 @@ const EditProfile = () => {
               containerStyle={styles.bio}
               onChangeText={(value) => setUser({ ...user, bio: value })}
             />
+
+            <Button title="Guardar" loading={loading} onPress={onSubmit} />
           </View>
         </ScrollView>
       </View>

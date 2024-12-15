@@ -82,7 +82,7 @@ const UserHeader = ({ user, router, handleLogout }) => {
           {/*Usuario y Ubicacion*/}
           <View style={{ alignItems: "center", gap: 4 }}>
             <Text style={styles.userName}>{user && user.name}</Text>
-            <Text style={styles.infoText}>{user && user.adress}</Text>
+            <Text style={styles.infoText}>{user && user.address}</Text>
           </View>
           {/*Email, tlf y descripcion*/}
           <View style={{ gap: 10 }}>
@@ -98,7 +98,7 @@ const UserHeader = ({ user, router, handleLogout }) => {
             )}
             {user && user.bio && (
               <View style={styles.info}>
-                <Text style={styles.infoText}>{user.bio}</Text>
+                <Text style={styles.infoText}>{user && user.bio}</Text>
               </View>
             )}
           </View>
