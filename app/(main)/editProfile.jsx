@@ -69,6 +69,25 @@ const EditProfile = () => {
               value={user.name}
               onChangeText={(value) => setUser({ ...user, name: value })}
             />
+            <Input
+              icon={<Icon name="call" />}
+              placeholder="Telefono"
+              value={user.phoneNumber}
+              onChangeText={(value) => setUser({ ...user, phoneNumber: value })}
+            />
+            <Input
+              icon={<Icon name="location" />}
+              placeholder="País"
+              value={user.address}
+              onChangeText={(value) => setUser({ ...user, address: value })}
+            />
+            <Input
+              placeholder="Bíografia"
+              value={user.bio}
+              multiline={true}
+              containerStyle={styles.bio}
+              onChangeText={(value) => setUser({ ...user, bio: value })}
+            />
           </View>
         </ScrollView>
       </View>

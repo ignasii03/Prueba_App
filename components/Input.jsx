@@ -6,7 +6,7 @@ import { wp, hp } from "../helper/common";
 const Input = (props) => {
   return (
     <View
-      style={[styles.container, props.containerStyles && props.containerStyles]}
+      style={[styles.container, props.containerStyle && props.containerStyle]}
     >
       {props.icon && props.icon}
       <TextInput
