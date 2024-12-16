@@ -11,6 +11,9 @@ import { useState, useEffect } from "react";
 import PostCard from "../../components/PostCard";
 import { FlatList } from "react-native";
 import { fetchPosts } from "../../services/postService";
+import Loading from "../../components/Loading";
+import { supabase } from "../../lib/supabase";
+import { getUserData } from "../../services/userServices";
 
 var limit = 0;
 const Home = () => {
@@ -18,18 +21,41 @@ const Home = () => {
   const router = useRouter();
 
   const [posts, setPosts] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+
+  const handlePostEvent = async (payload) => {
+    if (payload.eventType == "INSERT" && payload?.new?.id) {
+      let newPost = { ...payload.new };
+      let res = await getUserData(newPost.user_id);
+      newPost.user = res.success ? res.data : {};
+      setPosts((prevPosts) => [newPost, ...prevPosts]);
+    }
+  };
 
   useEffect(() => {
-    getPosts();
+    let postChannel = supabase
+      .channel("posts")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "posts" },
+        handlePostEvent
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(postChannel);
+    };
   }, []);
 
   const getPosts = async () => {
     //call api here
-    limit = limit + 10;
+
+    if (!hasMore) return null;
+    limit = limit + 4;
 
     let res = await fetchPosts(limit);
-    console.log(res);
     if (res.success) {
+      if (posts.length == res.data.length) setHasMore(false);
       setPosts(res.data);
     }
   };
@@ -76,6 +102,21 @@ const Home = () => {
           renderItem={({ item }) => (
             <PostCard item={item} currentUser={user} router={router} />
           )}
+          onEndReached={() => {
+            getPosts();
+          }}
+          onEndReachedThreshold={0}
+          ListFooterComponent={
+            hasMore ? (
+              <View style={{ marginVertical: posts.length == 0 ? 200 : 30 }}>
+                <Loading />
+              </View>
+            ) : (
+              <View style={{ marginVertical: 30 }}>
+                <Text style={styles.noPosts}>¡Has llegado al final!</Text>
+              </View>
+            )
+          }
         />
       </View>
     </ScreenWrapper>

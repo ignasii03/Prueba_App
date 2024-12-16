@@ -1,7 +1,32 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { theme } from "../constants/theme";
-import { hp } from "../helper/common";
+import { hp, wp } from "../helper/common";
+import Avatar from "./Avatar";
+import moment from "moment";
+import { TouchableOpacity } from "react-native";
+import Icon from "../assets/icons";
+import { useRouter } from "expo-router";
+import RenderHtml from "react-native-render-html";
+import { getSupabaseFileUrl } from "../services/imageService";
+import { Image } from "react-native";
+import { Video } from "expo-av";
+
+const textStyle = {
+  color: theme.colors.dark,
+  fontSize: hp(1.75),
+};
+const tagsStyles = {
+  div: textStyle,
+  p: textStyle,
+  ol: textStyle,
+  h1: {
+    color: theme.colors.dark,
+  },
+  h4: {
+    color: theme.colors.dark,
+  },
+};
 
 const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
   const shadowStyles = {
@@ -14,9 +39,94 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
     elevation: 1,
   };
 
+  const openPostDetails = () => {
+    //pendiente
+  };
+
+  const createdAt = moment(item?.created_at).format("MMM D");
+  const likes = [];
+  const liked = false;
+
   return (
-    <View>
-      <Text>PostCard</Text>
+    <View style={[styles.container, hasShadow && shadowStyles]}>
+      <View style={styles.header}>
+        <View style={styles.userInfo}>
+          <Avatar
+            size={hp(4.5)}
+            uri={item?.user?.image}
+            rounded={theme.radius.md}
+          />
+          <View style={{ gap: 2 }}>
+            <Text style={styles.username}>{item?.user?.name}</Text>
+            <Text style={styles.postTime}>{createdAt}</Text>
+          </View>
+        </View>
+        <TouchableOpacity onPress={openPostDetails}>
+          <Icon
+            name="threeDotsHorizontal"
+            size={hp(3.4)}
+            strokeWidth={3}
+            color={theme.colors.text}
+          />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.content}>
+        <View style={styles.postBody}>
+          {item?.body && (
+            <RenderHtml
+              contentWidth={wp(100)}
+              source={{ html: item?.body }}
+              tagsStyles={tagsStyles}
+            />
+          )}
+        </View>
+
+        {/*Imagen POST*/}
+        {item?.file && item?.file?.includes("postImages") && (
+          <Image
+            source={getSupabaseFileUrl(item?.file)}
+            transition={100}
+            style={styles.postMedia}
+            contentFit="cover"
+          />
+        )}
+        {/*Video POST*/}
+        {item?.file && item?.file?.includes("postVideos") && (
+          <Video
+            source={getSupabaseFileUrl(item?.file)}
+            style={[styles.postMedia, { height: hp(30) }]}
+            useNativeControls
+            resizeMode="cover"
+            isLooping
+          />
+        )}
+      </View>
+
+      {/*Like, comentario y compartir*/}
+      <View style={styles.footer}>
+        <View style={styles.footerButton}>
+          <TouchableOpacity>
+            <Icon
+              name="heart"
+              size={24}
+              fill={liked ? theme.colors.rose : "transparent"}
+              color={liked ? theme.colors.rose : theme.colors.textLight}
+            />
+          </TouchableOpacity>
+          <Text style={styles.count}>{likes?.length}</Text>
+        </View>
+        <View style={styles.footerButton}>
+          <TouchableOpacity>
+            <Icon name="comment" size={24} color={theme.colors.textLight} />
+          </TouchableOpacity>
+          <Text style={styles.count}>0</Text>
+        </View>
+        <View style={styles.footerButton}>
+          <TouchableOpacity>
+            <Icon name="share" size={24} color={theme.colors.textLight} />
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 };
@@ -27,7 +137,7 @@ const styles = StyleSheet.create({
   container: {
     gap: 10,
     marginBottom: 15,
-    norderRadius: theme.radius.xxl * 1.1,
+    borderRadius: theme.radius.xxl * 1.1,
     borderCurve: "continuous",
     padding: 10,
     paddingVertical: 12,
