@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, Button, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  Pressable,
+  FlatList,
+} from "react-native";
 import React from "react";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import { useAuth } from "@/contexts/AuthContext";
@@ -9,10 +16,29 @@ import { theme } from "../../constants/theme";
 import Icon from "../../assets/icons";
 import { useRouter } from "expo-router";
 import Avatar from "../../components/Avatar";
+import { useState, useEffect } from "react";
+import PostCard from "../../components/PostCard";
 
+var limit = 0;
 const Home = () => {
   const { user, setAuth } = useAuth();
   const router = useRouter();
+
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    getPosts();
+  }, []);
+
+  const getPosts = async () => {
+    //call api here
+    limit = limit + 10;
+
+    let res = await fetchPosts(limit);
+    if (res.success) {
+      setPosts(res.data);
+    }
+  };
 
   return (
     <ScreenWrapper bg="white">
@@ -47,8 +73,17 @@ const Home = () => {
             </Pressable>
           </View>
         </View>
+        {/* Posts */}
+        <FlatList
+          data={posts}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listStyle}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <PostCard item={item} currentUser={user} router={router} />
+          )}
+        />
       </View>
-      {/* <Button title="Cerrar sesión" onPress={onLogout} /> */}
     </ScreenWrapper>
   );
 };
