@@ -1,16 +1,7 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  Pressable,
-  FlatList,
-} from "react-native";
+import { StyleSheet, Text, View, Button, Pressable } from "react-native";
 import React from "react";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/lib/supabase";
-import { Alert } from "react-native";
 import { wp, hp } from "../../helper/common";
 import { theme } from "../../constants/theme";
 import Icon from "../../assets/icons";
@@ -18,6 +9,8 @@ import { useRouter } from "expo-router";
 import Avatar from "../../components/Avatar";
 import { useState, useEffect } from "react";
 import PostCard from "../../components/PostCard";
+import { FlatList } from "react-native";
+import { fetchPosts } from "../../services/postService";
 
 var limit = 0;
 const Home = () => {
@@ -35,6 +28,7 @@ const Home = () => {
     limit = limit + 10;
 
     let res = await fetchPosts(limit);
+    console.log(res);
     if (res.success) {
       setPosts(res.data);
     }

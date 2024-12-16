@@ -45,8 +45,9 @@ export const fetchPosts = async (limit = 10) => {
       .order("created_at", { ascending: false })
       .limit(limit);
 
-    if (error)
+    if (error) {
       return { success: false, msg: "error al cargar la lista de posts" };
+    }
     return { success: true, data: data };
   } catch (error) {
     return { success: false, msg: "error al cargar la lista de posts" };
