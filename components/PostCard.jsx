@@ -60,6 +60,7 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
         Alert.alert("Error", "Algo ha ido mal");
       }
     } else {
+      //añadir like
       let data = {
         userId: currentUser?.id,
         postId: item?.id,
