@@ -11,7 +11,8 @@ import RenderHtml from "react-native-render-html";
 import { getSupabaseFileUrl } from "../services/imageService";
 import { Image } from "react-native";
 import { Video } from "expo-av";
-
+import { createPostLike, removePostLike } from "../services/postService";
+import { useState, useEffect } from "react";
 const textStyle = {
   color: theme.colors.dark,
   fontSize: hp(1.75),
@@ -39,13 +40,42 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
     elevation: 1,
   };
 
+  const [likes, setLikes] = useState([]);
+
+  useEffect(() => {
+    setLikes(item?.postLikes);
+  }, []);
+
   const openPostDetails = () => {
     //pendiente
   };
 
+  const onLike = async () => {
+    if (liked) {
+      //eliminar like
+      let updatedLikes = likes.filter((like) => like.userId != currentUser?.id);
+      setLikes([...updatedLikes]);
+      let res = await removePostLike(item?.id, currentUser?.id);
+      if (!res.success) {
+        Alert.alert("Error", "Algo ha ido mal");
+      }
+    } else {
+      let data = {
+        userId: currentUser?.id,
+        postId: item?.id,
+      };
+      setLikes([...likes, data]);
+      let res = await createPostLike(data);
+      if (!res.success) {
+        Alert.alert("Error", "Algo ha ido mal");
+      }
+    }
+  };
+
   const createdAt = moment(item?.created_at).format("MMM D");
-  const likes = [];
-  const liked = false;
+  const liked = likes.filter((like) => like.userId == currentUser?.id)[0]
+    ? true
+    : false;
 
   return (
     <View style={[styles.container, hasShadow && shadowStyles]}>
@@ -105,7 +135,7 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
       {/*Like, comentario y compartir*/}
       <View style={styles.footer}>
         <View style={styles.footerButton}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onLike}>
             <Icon
               name="heart"
               size={24}

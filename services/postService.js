@@ -39,7 +39,8 @@ export const fetchPosts = async (limit = 10) => {
           id,
           name,
           image
-        )
+        ),
+        postLikes (*)
         `
       )
       .order("created_at", { ascending: false })
@@ -51,5 +52,39 @@ export const fetchPosts = async (limit = 10) => {
     return { success: true, data: data };
   } catch (error) {
     return { success: false, msg: "error al cargar la lista de posts" };
+  }
+};
+
+export const createPostLike = async (postLike) => {
+  try {
+    const { data, error } = await supabase
+      .from("postLikes")
+      .insert(postLike)
+      .select()
+      .single();
+
+    if (error) {
+      return { success: false, msg: "No se pudo crear el like" };
+    }
+    return { success: true, data: data };
+  } catch (error) {
+    return { success: false, msg: "No se pudo crear el like" };
+  }
+};
+
+export const removePostLike = async (postId, userId) => {
+  try {
+    const { error } = await supabase
+      .from("postLikes")
+      .delete()
+      .eq("postId", postId)
+      .eq("userId", userId);
+
+    if (error) {
+      return { success: false, msg: "No se pudo eliminar el like" };
+    }
+    return { success: true, data: data };
+  } catch (error) {
+    return { success: false, msg: "No se pudo eliminar el like" };
   }
 };
