@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Share, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { theme } from "../constants/theme";
-import { hp, wp } from "../helper/common";
+import { hp, stripHtmlTags, wp } from "../helper/common";
 import Avatar from "./Avatar";
 import moment from "moment";
 import { TouchableOpacity } from "react-native";
@@ -71,6 +71,14 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
         Alert.alert("Error", "Algo ha ido mal");
       }
     }
+  };
+
+  const onShare = async () => {
+    let content = { message: stripHtmlTags(item?.body) };
+    if (item?.file) {
+      //descargr y enviar
+    }
+    Share.share(content);
   };
 
   const createdAt = moment(item?.created_at).format("MMM D");
@@ -153,7 +161,7 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
           <Text style={styles.count}>0</Text>
         </View>
         <View style={styles.footerButton}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onShare}>
             <Icon name="share" size={24} color={theme.colors.textLight} />
           </TouchableOpacity>
         </View>
