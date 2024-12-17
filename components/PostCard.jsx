@@ -8,11 +8,12 @@ import { TouchableOpacity } from "react-native";
 import Icon from "../assets/icons";
 import { useRouter } from "expo-router";
 import RenderHtml from "react-native-render-html";
-import { getSupabaseFileUrl } from "../services/imageService";
+import { downloadFile, getSupabaseFileUrl } from "../services/imageService";
 import { Image } from "react-native";
 import { Video } from "expo-av";
 import { createPostLike, removePostLike } from "../services/postService";
 import { useState, useEffect } from "react";
+import Loading from "./Loading";
 const textStyle = {
   color: theme.colors.dark,
   fontSize: hp(1.75),
@@ -41,6 +42,7 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
   };
 
   const [likes, setLikes] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLikes(item?.postLikes);
@@ -77,6 +79,10 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
     let content = { message: stripHtmlTags(item?.body) };
     if (item?.file) {
       //descargr y enviar
+      setLoading(true);
+      let uri = await downloadFile(getSupabaseFileUrl(item?.file).uri);
+      setLoading(false);
+      content.url = uri;
     }
     Share.share(content);
   };
@@ -161,9 +167,13 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
           <Text style={styles.count}>0</Text>
         </View>
         <View style={styles.footerButton}>
-          <TouchableOpacity onPress={onShare}>
-            <Icon name="share" size={24} color={theme.colors.textLight} />
-          </TouchableOpacity>
+          {loading ? (
+            <Loading size="small" />
+          ) : (
+            <TouchableOpacity onPress={onShare}>
+              <Icon name="share" size={24} color={theme.colors.textLight} />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </View>
