@@ -40,7 +40,8 @@ export const fetchPosts = async (limit = 10) => {
           name,
           image
         ),
-        postLikes (*)
+        postLikes (*),
+        comments (count)
         `
       )
       .order("created_at", { ascending: false })
@@ -86,5 +87,58 @@ export const removePostLike = async (postId, userId) => {
     return { success: true, data: data };
   } catch (error) {
     return { success: false, msg: "No se pudo eliminar el like" };
+  }
+};
+
+export const fetchPostDetails = async (postId) => {
+  try {
+    const { data, error } = await supabase
+      .from("posts")
+      .select(
+        `
+        *,
+        user: users(
+          id,
+          name,
+          image
+        ),
+        postLikes (*),
+        comments (
+          *,
+          user: users(
+            id,
+            name,
+            image
+          )
+        )
+        `
+      )
+      .eq("id", postId)
+      .order("created_at", { ascending: false, foreignTable: "comments" })
+      .single();
+
+    if (error) {
+      return { success: false, msg: "error al cargar la lista de posts" };
+    }
+    return { success: true, data: data };
+  } catch (error) {
+    return { success: false, msg: "error al cargar la lista de posts" };
+  }
+};
+
+export const createPostComment = async (comment) => {
+  try {
+    const { data, error } = await supabase
+      .from("comments")
+      .insert(comment)
+      .select()
+      .single();
+
+    if (error) {
+      return { success: false, msg: "No se pudo crear el comentario" };
+    }
+    return { success: true, data: data };
+  } catch (error) {
+    return { success: false, msg: "No se pudo crear el comentario" };
   }
 };
